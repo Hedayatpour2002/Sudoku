@@ -129,6 +129,22 @@ table {
 }
 
 /*  !========> App <========! */
+
+:root {
+  --blue: #307df6;
+  --white: #f4f6ff;
+  --gray: #4e596b;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-Regular.ttf");
+}
+@font-face {
+  font-family: "Inter-Bold";
+  src: url("fonts/Inter-Bold.ttf");
+}
+
 html {
   box-sizing: border-box;
   font-size: 10px;
@@ -139,16 +155,211 @@ html {
   box-sizing: inherit;
 }
 body {
-  font-family: sans-serif;
-  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+  line-height: 1.4;
   font-size: 1.6rem;
-}
 
-.container {
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 100vh;
+
   padding-right: 1.5rem;
   padding-left: 1.5rem;
-  margin-right: auto;
-  margin-left: auto;
 }
 
+.sudoku {
+  width: 50rem;
+  min-height: 50rem;
+
+  padding: 2.8rem 6rem 1.7rem;
+
+  background-color: ;
+  background-image: linear-gradient(
+    to bottom,
+    var(--blue) 45%,
+    var(--white) 45%
+  );
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+
+  text-align: center;
+}
+.shape {
+  top: 4.3rem;
+  position: absolute;
+}
+
+/* !===> Nav <===! */
+.nav {
+  width: 100%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav__head {
+}
+.nav__title {
+  font-size: 6.4rem;
+}
+.nav__username {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.088rem;
+  filter: opacity(0.5);
+  text-transform: uppercase;
+}
+
+/* !===> Level <===! */
+.level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  display: none;
+}
+.level__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.088rem;
+}
+.level__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+}
+.level__number {
+  font-size: 2.4rem;
+}
+.level__step {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  border: 0.1rem solid #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.level__step::after,
+.level__step::before {
+  content: "";
+  position: absolute;
+  width: 0.6rem;
+  height: 0.15rem;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+.level__step:hover {
+  background-color: #fff;
+}
+.level__step:hover::after,
+.level__step:hover::before {
+  background-color: var(--blue);
+}
+.level__step--inactive {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.level__step--inactive:hover {
+  background-color: transparent;
+}
+.level__step--inactive:hover::after,
+.level__step--inactive:hover::before {
+  background-color: #fff;
+}
+.level__previous {
+}
+
+.level__previous::after,
+.level__previous::before {
+  transform-origin: left;
+  transform-origin: left;
+  border-radius: 0 1rem 1rem 0;
+}
+.level__previous::after {
+  transform: rotate(45deg);
+}
+.level__previous::before {
+  transform: rotate(-45deg);
+}
+
+.level__next {
+}
+
+.level__next::after,
+.level__next::before {
+  transform-origin: right;
+  transform-origin: right;
+  border-radius: 1rem 0 0 1rem;
+}
+.level__next::after {
+  transform: rotate(45deg);
+}
+.level__next::before {
+  transform: rotate(-45deg);
+}
+
+/* !===> Guid <===! */
+.guide {
+  font-size: 1.2rem;
+  color: var(--gray);
+  max-width: 26rem;
+  margin-top: 5.2rem;
+}
+.bold {
+  font-weight: 700;
+}
+
+/* !===> start <===! */
+.start {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--blue);
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.start__play,
+.start__username {
+  color: inherit;
+  background-color: transparent;
+  border-radius: 2.4rem;
+  border: 2px solid var(--blue);
+  padding: 0.8rem 3.2rem;
+
+  font-weight: 800;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  height: 4.2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.start__username {
+  font-size: 1.2rem;
+  outline: none;
+  caret-color: #87cefa;
+}
+.start__username::placeholder {
+  color: inherit;
+}
+
+.start__play {
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+.start__play:hover {
+  background-color: var(--blue);
+  color: #fff;
+}
