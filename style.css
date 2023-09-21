@@ -148,7 +148,7 @@ table {
 
 html {
   box-sizing: border-box;
-  font-size: 10px;
+  font-size: 12px;
 }
 *,
 *::after,
@@ -170,6 +170,8 @@ body {
   padding-left: 1.5rem;
 
   user-select: none;
+
+  background-color: #2d2d30;
 }
 
 .sudoku {
@@ -535,4 +537,25 @@ button:hover {
 }
 .play .numbers {
   display: flex;
+}
+
+@media (max-width: 565px) {
+  html {
+    font-size: 10px;
+  }
+}
+@media (max-width: 496px) {
+  .option-btn {
+    flex-direction: column;
+  }
+}
+@media (max-width: 435px) {
+  html {
+    font-size: 8px;
+  }
+}
+@media (max-width: 340px) {
+  html {
+    font-size: 6px;
+  }
 }
