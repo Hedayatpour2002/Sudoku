@@ -3,6 +3,18 @@ const playBtnElem = $.querySelector(".start__play");
 const usernameInputElem = $.querySelector(".start__username");
 const usernameElem = $.querySelector(".nav__username");
 
+const restartBtnElem = $.querySelector(".restart");
+const removeNumbersBtnElem = $.querySelector(".remove-numbers");
+
+const numberLevelBtnElem = $.querySelector(".level__number");
+const previousLevelBtnElem = $.querySelector(".level__previous");
+const nextLevelBtnElem = $.querySelector(".level__next");
+
+let level = 1;
+
+const cellsElem = $.querySelectorAll(".cell");
+const boardElem = $.querySelector(".board");
+
 function startGame() {
   const isValidUsername = checkUsername(usernameInputElem.value);
   if (!isValidUsername) {
@@ -11,10 +23,66 @@ function startGame() {
   }
 
   $.body.classList.add("play");
+
+  sudoku = Array(9)
+    .fill()
+    .map(() => Array(9).fill(0));
+
   creatNewSudoku();
-  console.log(sudoku);
+  renderSudoku();
 }
 
+function renderSudoku() {
+  cellsElem.forEach((cell) => {
+    if (cell.dataset.default) {
+      cell.dataset.default = "";
+      cell.textContent = "";
+    }
+  });
+
+  numberLevelBtnElem.textContent = level;
+  cellDisplayQuantity = level === 1 ? 45 : level === 2 ? 30 : 20;
+
+  const puzzle = creatNewPuzzle(cellDisplayQuantity);
+
+  for (let i = 0; i < 9; i++)
+    for (let j = 0; j < 9; j++)
+      if (puzzle[i][j] != 0) {
+        boardElem.children[i].children[j].textContent = puzzle[i][j];
+        boardElem.children[i].children[j].dataset.default = "true";
+      }
+}
+function creatNewPuzzle(number) {
+  number = 81 - number;
+  const puzzle = sudoku.map((item) => item.slice());
+
+  const indexs = [];
+
+  for (let i = 0; i < number; i++) {
+    const newI = randomNumber(9);
+    const newJ = randomNumber(9);
+
+    if (
+      !indexs.some((item) => {
+        return item[0] === newI && item[1] === newJ;
+      })
+    ) {
+      indexs.push([newI, newJ]);
+    } else {
+      i--;
+    }
+  }
+  for (const key of indexs) {
+    const i = key[0] - 1;
+    const j = key[1] - 1;
+    puzzle[i][j] = 0;
+  }
+  return puzzle;
+}
+
+function restartGame() {
+  $.body.classList.remove("play");
+}
 function checkUsername(username) {
   if (username) {
     usernameElem.textContent = username;
@@ -25,6 +93,25 @@ function checkUsername(username) {
   return false;
 }
 
+previousLevelBtnElem.addEventListener("click", () => {
+  if (level === 1) return;
+  nextLevelBtnElem.classList.remove("level__step--inactive");
+  level--;
+  if (level === 1) {
+    previousLevelBtnElem.classList.add("level__step--inactive");
+  }
+  startGame();
+});
+nextLevelBtnElem.addEventListener("click", () => {
+  if (level === 3) return;
+  previousLevelBtnElem.classList.remove("level__step--inactive");
+  level++;
+  if (level === 3) {
+    nextLevelBtnElem.classList.add("level__step--inactive");
+  }
+  startGame();
+});
+restartBtnElem.addEventListener("click", restartGame);
 playBtnElem.addEventListener("click", startGame);
 usernameInputElem.addEventListener("input", () => {
   usernameInputElem.classList.remove("invalid");
@@ -35,7 +122,7 @@ window.addEventListener("load", () => {
 
 // !====> sudoku logic start <====!
 
-const sudoku = Array(9)
+let sudoku = Array(9)
   .fill()
   .map(() => Array(9).fill(0));
 
