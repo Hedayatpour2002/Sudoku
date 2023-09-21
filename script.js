@@ -34,10 +34,8 @@ function startGame() {
 
 function renderSudoku() {
   cellsElem.forEach((cell) => {
-    if (cell.dataset.default) {
-      cell.dataset.default = "";
-      cell.textContent = "";
-    }
+    cell.dataset.default = "";
+    cell.textContent = "";
   });
 
   numberLevelBtnElem.textContent = level;
@@ -118,6 +116,103 @@ usernameInputElem.addEventListener("input", () => {
 });
 window.addEventListener("load", () => {
   usernameInputElem.value = localStorage.getItem("username");
+});
+
+// !====> insert number to cell <====!
+
+const numbersBtnElem = $.querySelector(".numbers");
+
+function insertNumberToCell(number) {
+  const cell = boardElem.querySelector(".selected");
+
+  if (number && cell) {
+    cell.textContent = number;
+    removeSelectedClass();
+  }
+}
+
+numbersBtnElem.addEventListener("click", (event) => {
+  const number = event.target.dataset.number;
+  insertNumberToCell(number);
+});
+
+cellsElem.forEach((cell) => {
+  cell.addEventListener("click", () => {
+    removeSelectedClass();
+    if (!cell.dataset.default) {
+      cell.classList.add("selected");
+
+      selectGroup();
+    }
+  });
+});
+
+function removeSelectedClass() {
+  if (!boardElem.querySelector(".selected")) return;
+
+  const index = calculateRowAndColumn();
+  console.log(index);
+
+  if (!index) return;
+  const row = index[0];
+  const column = index[1];
+
+  for (let i = 0; i < 9; i++) {
+    console.log(boardElem.children[row].children[i]);
+    boardElem.children[row].children[i].classList.remove("group");
+  }
+  for (let i = 0; i < 9; i++) {
+    boardElem.children[i].children[column].classList.remove("group");
+  }
+
+  boardElem.querySelector(".selected").classList.remove("selected");
+}
+
+function selectGroup() {
+  const index = calculateRowAndColumn();
+  if (!index) return;
+
+  const row = index[0];
+  const column = index[1];
+
+  for (let i = 0; i < 9; i++) {
+    boardElem.children[row].children[i].classList.add("group");
+  }
+  for (let i = 0; i < 9; i++) {
+    boardElem.children[i].children[column].classList.add("group");
+  }
+}
+
+function calculateRowAndColumn() {
+  for (let i = 0; i < 9; i++) {
+    const row = boardElem.children[i];
+    for (let j = 0; j < 9; j++) {
+      const cell = row.children[j];
+      if (cell.className.includes("selected")) return [i, j];
+    }
+  }
+}
+
+window.addEventListener("click", (event) => {
+  const target = event.target;
+
+  const isIncludes =
+    target.className.includes("cell") ||
+    target.className.includes("board__row") ||
+    target.className.includes("board");
+
+  if (!isIncludes) {
+    removeSelectedClass();
+  }
+});
+window.addEventListener("keydown", (event) => {
+  if (Number(event.key) <= 9 && Number(event.key) >= 1) {
+    insertNumberToCell(event.key);
+  }
+});
+window.addEventListener("contextmenu", (event) => {
+  event.preventDefault();
+  removeSelectedClass();
 });
 
 // !====> sudoku logic start <====!
