@@ -44,7 +44,7 @@ function renderSudoku() {
   });
 
   numberLevelBtnElem.textContent = level;
-  cellDisplayQuantity = level === 1 ? 45 : level === 2 ? 30 : 20;
+  cellDisplayQuantity = level === 1 ? 80 : level === 2 ? 30 : 20;
 
   const puzzle = creatNewPuzzle(cellDisplayQuantity);
 
@@ -103,6 +103,7 @@ function removeWinSign() {
   boardElem.addEventListener("click", cellClick);
   window.addEventListener("keydown", insertNumberWithKey);
   numbersBtnElem.addEventListener("click", numbersBtnElemClick);
+  boardElem.addEventListener("contextmenu", deleteNumber);
 }
 
 function checkUsername(username) {
@@ -223,6 +224,14 @@ function numbersBtnElemClick(event) {
   insertNumberToCell(number);
 }
 
+function deleteNumber(event) {
+  const target = event.target;
+
+  if (target.className.includes("cell") && !target.dataset.default) {
+    target.textContent = "";
+  }
+}
+
 boardElem.addEventListener("click", cellClick);
 
 window.addEventListener("keydown", insertNumberWithKey);
@@ -240,6 +249,7 @@ window.addEventListener("click", (event) => {
     removeSelectedClass();
   }
 });
+boardElem.addEventListener("contextmenu", deleteNumber);
 window.addEventListener("contextmenu", (event) => {
   if (event.target.nodeName === "BODY") return;
 
@@ -276,6 +286,7 @@ function winFun() {
   window.removeEventListener("keydown", insertNumberWithKey);
   numbersBtnElem.removeEventListener("click", numbersBtnElemClick);
   boardElem.removeEventListener("click", cellClick);
+  boardElem.removeEventListener("contextmenu", deleteNumber);
 }
 
 // !====> sudoku logic start <====!
