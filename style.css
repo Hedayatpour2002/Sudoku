@@ -392,6 +392,11 @@ body {
   background: var(--blue);
   opacity: 0.1;
 }
+.cell.win {
+  background-color: #7db700;
+  color: #fff;
+}
+
 /* !===> Numbers <===! */
 
 .numbers {

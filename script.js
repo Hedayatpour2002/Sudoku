@@ -11,11 +11,16 @@ const previousLevelBtnElem = $.querySelector(".level__previous");
 const nextLevelBtnElem = $.querySelector(".level__next");
 
 let level = 1;
+let cellDisplayQuantity = null;
 
 const cellsElem = $.querySelectorAll(".cell");
 const boardElem = $.querySelector(".board");
 
 function startGame() {
+  boardElem.querySelectorAll(".win").forEach((cell) => {
+    cell.classList.remove("win");
+  });
+
   const isValidUsername = checkUsername(usernameInputElem.value);
   if (!isValidUsername) {
     usernameInputElem.classList.add("invalid");
@@ -80,11 +85,24 @@ function creatNewPuzzle(number) {
 
 function restartGame() {
   $.body.classList.remove("play");
+  removeWinSign();
 }
 function removeInsertNumbers() {
   boardElem.querySelectorAll(".cell[data-default='']").forEach((cell) => {
     cell.textContent = "";
   });
+
+  removeWinSign();
+}
+
+function removeWinSign() {
+  boardElem.querySelectorAll(".win").forEach((cell) => {
+    cell.classList.remove("win");
+  });
+
+  boardElem.addEventListener("click", cellClick);
+  window.addEventListener("keydown", insertNumberWithKey);
+  numbersBtnElem.addEventListener("click", numbersBtnElemClick);
 }
 
 function checkUsername(username) {
@@ -129,16 +147,17 @@ window.addEventListener("load", () => {
 
 const numbersBtnElem = $.querySelector(".numbers");
 
-cellsElem.forEach((cell) => {
-  cell.addEventListener("click", () => {
-    removeSelectedClass();
-    if (!cell.dataset.default) {
-      cell.classList.add("selected");
+function cellClick(event) {
+  const target = event.target;
+  if (!target.className.includes("cell")) return;
 
-      selectGroup();
-    }
-  });
-});
+  removeSelectedClass();
+  if (!target.dataset.default) {
+    target.classList.add("selected");
+
+    selectGroup();
+  }
+}
 
 function selectGroup() {
   const index = calculateRowAndColumn();
@@ -161,6 +180,7 @@ function insertNumberToCell(number) {
   if (number && cell) {
     cell.textContent = number;
     removeSelectedClass();
+    checkWin();
   }
 }
 
@@ -193,10 +213,21 @@ function calculateRowAndColumn() {
   }
 }
 
-numbersBtnElem.addEventListener("click", (event) => {
+function insertNumberWithKey(event) {
+  if (Number(event.key) <= 9 && Number(event.key) >= 1) {
+    insertNumberToCell(event.key);
+  }
+}
+function numbersBtnElemClick(event) {
   const number = event.target.dataset.number;
   insertNumberToCell(number);
-});
+}
+
+boardElem.addEventListener("click", cellClick);
+
+window.addEventListener("keydown", insertNumberWithKey);
+numbersBtnElem.addEventListener("click", numbersBtnElemClick);
+
 window.addEventListener("click", (event) => {
   const target = event.target;
 
@@ -209,17 +240,43 @@ window.addEventListener("click", (event) => {
     removeSelectedClass();
   }
 });
-window.addEventListener("keydown", (event) => {
-  if (Number(event.key) <= 9 && Number(event.key) >= 1) {
-    insertNumberToCell(event.key);
-  }
-});
 window.addEventListener("contextmenu", (event) => {
   if (event.target.nodeName === "BODY") return;
 
   event.preventDefault();
   removeSelectedClass();
 });
+
+// !====> Win <====!
+
+function checkWin() {
+  let isEnd = true;
+
+  boardElem.querySelectorAll(".cell[data-default='']").forEach((cell) => {
+    if (!Boolean(cell.textContent)) return (isEnd = false);
+  });
+
+  if (!isEnd) return false;
+
+  for (let i = 0; i < 9; i++)
+    for (let j = 0; j < 9; j++)
+      if (boardElem.children[i].children[j].textContent != sudoku[i][j]) {
+        return false;
+      }
+  winFun();
+  return true;
+}
+
+function winFun() {
+  alert("you win");
+
+  boardElem.querySelectorAll(".cell[data-default='']").forEach((cell) => {
+    cell.classList.add("win");
+  });
+  window.removeEventListener("keydown", insertNumberWithKey);
+  numbersBtnElem.removeEventListener("click", numbersBtnElemClick);
+  boardElem.removeEventListener("click", cellClick);
+}
 
 // !====> sudoku logic start <====!
 
