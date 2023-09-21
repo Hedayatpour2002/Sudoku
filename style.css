@@ -189,8 +189,8 @@ body {
   align-items: center;
   justify-content: flex-end;
   position: relative;
-
   text-align: center;
+  overflow: hidden;
 }
 .shape {
   top: 4.3rem;

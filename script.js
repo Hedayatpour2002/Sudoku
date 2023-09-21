@@ -215,6 +215,8 @@ window.addEventListener("keydown", (event) => {
   }
 });
 window.addEventListener("contextmenu", (event) => {
+  if (event.target.nodeName === "BODY") return;
+
   event.preventDefault();
   removeSelectedClass();
 });
