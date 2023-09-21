@@ -1,8 +1,43 @@
+const $ = document;
+const playBtnElem = $.querySelector(".start__play");
+const usernameInputElem = $.querySelector(".start__username");
+const usernameElem = $.querySelector(".nav__username");
+
+function startGame() {
+  const isValidUsername = checkUsername(usernameInputElem.value);
+  if (!isValidUsername) {
+    usernameInputElem.classList.add("invalid");
+    return;
+  }
+
+  $.body.classList.add("play");
+  creatNewSudoku();
+  console.log(sudoku);
+}
+
+function checkUsername(username) {
+  if (username) {
+    usernameElem.textContent = username;
+    localStorage.setItem("username", username);
+    return true;
+  }
+
+  return false;
+}
+
+playBtnElem.addEventListener("click", startGame);
+usernameInputElem.addEventListener("input", () => {
+  usernameInputElem.classList.remove("invalid");
+});
+window.addEventListener("load", () => {
+  usernameInputElem.value = localStorage.getItem("username");
+});
+
+// !====> sudoku logic start <====!
+
 const sudoku = Array(9)
   .fill()
   .map(() => Array(9).fill(0));
-
-creatNewSudoku();
 
 function creatNewSudoku(row = 0, column = 0) {
   // Checks if we have reached the end of the column.
