@@ -44,7 +44,7 @@ function renderSudoku() {
   });
 
   numberLevelBtnElem.textContent = level;
-  cellDisplayQuantity = level === 1 ? 80 : level === 2 ? 30 : 20;
+  cellDisplayQuantity = level === 1 ? 45 : level === 2 ? 30 : 20;
 
   const puzzle = creatNewPuzzle(cellDisplayQuantity);
 
