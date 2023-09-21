@@ -2,6 +2,9 @@
 
 This is a 9x9 Sudoku game written using HTML, CSS, and JavaScript. In this game, only one number from 1 to 9 can exist in each row, column, and 3x3 square.
 
+## Demo
+[Check the live demo here ⭐](https://idyllic-puppy-ce3d64.netlify.app/)
+
 ## How to Play
 
 To place a number on a square, you must first click on the square and then select the desired number using the buttons 1 to 9 located below the board. You can also select the desired number using the keyboard keys. To remove a number from a square, simply right-click on the desired square.
