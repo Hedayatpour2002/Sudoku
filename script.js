@@ -81,6 +81,12 @@ function creatNewPuzzle(number) {
 function restartGame() {
   $.body.classList.remove("play");
 }
+function removeInsertNumbers() {
+  boardElem.querySelectorAll(".cell[data-default='']").forEach((cell) => {
+    cell.textContent = "";
+  });
+}
+
 function checkUsername(username) {
   if (username) {
     usernameElem.textContent = username;
@@ -91,6 +97,7 @@ function checkUsername(username) {
   return false;
 }
 
+removeNumbersBtnElem.addEventListener("click", removeInsertNumbers);
 previousLevelBtnElem.addEventListener("click", () => {
   if (level === 1) return;
   nextLevelBtnElem.classList.remove("level__step--inactive");
@@ -122,20 +129,6 @@ window.addEventListener("load", () => {
 
 const numbersBtnElem = $.querySelector(".numbers");
 
-function insertNumberToCell(number) {
-  const cell = boardElem.querySelector(".selected");
-
-  if (number && cell) {
-    cell.textContent = number;
-    removeSelectedClass();
-  }
-}
-
-numbersBtnElem.addEventListener("click", (event) => {
-  const number = event.target.dataset.number;
-  insertNumberToCell(number);
-});
-
 cellsElem.forEach((cell) => {
   cell.addEventListener("click", () => {
     removeSelectedClass();
@@ -146,27 +139,6 @@ cellsElem.forEach((cell) => {
     }
   });
 });
-
-function removeSelectedClass() {
-  if (!boardElem.querySelector(".selected")) return;
-
-  const index = calculateRowAndColumn();
-  console.log(index);
-
-  if (!index) return;
-  const row = index[0];
-  const column = index[1];
-
-  for (let i = 0; i < 9; i++) {
-    console.log(boardElem.children[row].children[i]);
-    boardElem.children[row].children[i].classList.remove("group");
-  }
-  for (let i = 0; i < 9; i++) {
-    boardElem.children[i].children[column].classList.remove("group");
-  }
-
-  boardElem.querySelector(".selected").classList.remove("selected");
-}
 
 function selectGroup() {
   const index = calculateRowAndColumn();
@@ -183,6 +155,34 @@ function selectGroup() {
   }
 }
 
+function insertNumberToCell(number) {
+  const cell = boardElem.querySelector(".selected");
+
+  if (number && cell) {
+    cell.textContent = number;
+    removeSelectedClass();
+  }
+}
+
+function removeSelectedClass() {
+  if (!boardElem.querySelector(".selected")) return;
+
+  const index = calculateRowAndColumn();
+
+  if (!index) return;
+  const row = index[0];
+  const column = index[1];
+
+  for (let i = 0; i < 9; i++) {
+    boardElem.children[row].children[i].classList.remove("group");
+  }
+  for (let i = 0; i < 9; i++) {
+    boardElem.children[i].children[column].classList.remove("group");
+  }
+
+  boardElem.querySelector(".selected").classList.remove("selected");
+}
+
 function calculateRowAndColumn() {
   for (let i = 0; i < 9; i++) {
     const row = boardElem.children[i];
@@ -193,6 +193,10 @@ function calculateRowAndColumn() {
   }
 }
 
+numbersBtnElem.addEventListener("click", (event) => {
+  const number = event.target.dataset.number;
+  insertNumberToCell(number);
+});
 window.addEventListener("click", (event) => {
   const target = event.target;
 
